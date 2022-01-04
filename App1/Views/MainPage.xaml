@@ -30,7 +30,11 @@
         <Label Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Text="Cool!"
                FontSize="Large" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
         
-        <CollectionView ItemsSource="{Binding AllNotes}" Grid.Row="3" Grid.ColumnSpan="2">
+        <CollectionView  Grid.Row="3" Grid.ColumnSpan="2"
+                         ItemsSource="{Binding AllNotes}"
+                         SelectionMode="Single"
+                         SelectedItem="{Binding SelectedNote}"
+                         SelectionChangedCommand="{Binding SelectedNoteChangedCommand}">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <StackLayout>

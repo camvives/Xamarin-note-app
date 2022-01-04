@@ -1,4 +1,5 @@
-﻿using System;
+﻿using App1.Views;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -9,6 +10,8 @@ namespace App1.ViewModels
 {
     class MainPageViewModel : INotifyPropertyChanged
     {
+
+
         public MainPageViewModel()
         {
             AllNotes = new ObservableCollection<string>();
@@ -25,30 +28,54 @@ namespace App1.ViewModels
                 TheNote = string.Empty;
             });
 
+            SelectedNoteChangedCommand = new Command(async() =>
+            {
+                DetailPageViewModel detailVM = new DetailPageViewModel(SelectedNote);
+
+                DetailPage detailPage = new DetailPage();
+
+                detailPage.BindingContext = detailVM;
+
+                await Application.Current.MainPage.Navigation.PushModalAsync(detailPage);
+
+            });
+
         }
 
         public ObservableCollection<string> AllNotes { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        string theNote;
 
-        public string TheNote 
-        { 
+        private string theNote;
+        public string TheNote
+        {
             get => theNote;
             set
             {
                 theNote = value;
                 // indica a la vista que la propiedad cambió
-                var args = new PropertyChangedEventArgs(nameof(TheNote));
-
+                PropertyChangedEventArgs args = new PropertyChangedEventArgs(nameof(TheNote));
                 PropertyChanged?.Invoke(this, args);
             }
 
         }
 
+        private string selectedNote;
+        public string SelectedNote { get => selectedNote; 
+            set
+            {
+                selectedNote = value;
+
+                PropertyChangedEventArgs args = new PropertyChangedEventArgs(nameof(selectedNote));
+                PropertyChanged?.Invoke(this, args);
+
+            }
+        }
+
         public Command SaveCommand { get; }
         public Command EraseCommand { get; }
+        public Command SelectedNoteChangedCommand { get; }
 
     }
 }
